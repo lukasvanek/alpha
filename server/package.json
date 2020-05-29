@@ -1,0 +1,63 @@
+{
+  "name": "alpha-server",
+  "version": "1.0.0",
+  "description": "Backend for Alpha",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "nodemon src/index.js",
+    "start:ci": "node src/index.js",
+    "dev": "ts-node-dev --no-notify --respawn --transpileOnly src/index",
+    "script": "ts-node-dev --no-notify --respawn --transpileOnly script/index"
+  },
+  "author": "Lukas Vanek",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-datasource": "^0.1.3",
+    "apollo-datasource-rest": "^0.1.5",
+    "apollo-server": "2.6.1",
+    "apollo-server-testing": "2.6.1",
+    "aws-sdk": "^2.585.0",
+    "axios": "^0.19.2",
+    "bluebird": "^3.7.2",
+    "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^8.2.0",
+    "graphql": "^14.5.8",
+    "isemail": "^3.1.3",
+    "mime": "^2.4.4",
+    "mongoose": "^5.9.16",
+    "nodemon": "^1.19.4",
+    "sequelize": "^5.21.2",
+    "sqlite3": "^4.1.1",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.32",
+    "@types/mongoose": "^5.7.21",
+    "@types/node": "^14.0.5",
+    "apollo": "^2.1.8",
+    "apollo-link": "^1.2.3",
+    "apollo-link-http": "^1.5.5",
+    "jest": "^25.0.0",
+    "nock": "^10.0.2",
+    "node-fetch": "^2.2.1",
+    "now": "^12.1.3",
+    "ts-node": "^8.10.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.9.3"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "all"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__utils"
+    ]
+  }
+}
