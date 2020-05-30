@@ -78,4 +78,12 @@ export default gql`
     Volume: Float,
     Change: Float
   }
+  type Range {
+    min: Float,
+    max: Float
+  }
+  type DistributionItem {
+    name: Range,
+    count: Int
+  }
 `;
