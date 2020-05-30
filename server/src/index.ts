@@ -1,8 +1,3 @@
-/**
- * Bootstrap your app
- * @author Anurag Garg <garganurag893@gmail.com>
- */
-
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import config from './config';
