@@ -7,7 +7,7 @@ const MainTypeDefs = gql`
   type Query {
     companies(page: Int, limit: Int): [Company!]!
     company(symbol: String!): Company!
-    distribution(field: String!, boundaries: [Int]): [DistributionItem]
+    distribution(field: String!, boundaries: [Float]): [DistributionItem]
   }
   type Mutation {
     symbol: String!
