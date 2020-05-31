@@ -3,11 +3,14 @@ import { lighten } from 'polished';
 export const colors = {
   text: '#fff',
   background: '#000',
-  primary: '#0027ff',
+  primary: '#002af8',
   secondary: '#03dac6',
   muted: '#f6f6f6',
   gray: '#555',
-  purple: '#cf1fd7'
+  purple: '#cf1fd7',
+  red: '#F64747',
+  green: '#00B16A',
+  yellow: '#F4D03F',
 }
 
 export const preset = {
@@ -100,15 +103,26 @@ export const preset = {
       fontSize: '0.7rem',
       fontWeight: 300,
       color: 'white',
-      backgroundImage: `linear-gradient(36deg, ${colors.primary} 0%, ${colors.purple} 100%)`,
       borderRadius: '2rem',
       cursor: 'pointer',
-      transition: 'all 70ms ease-in-out',
-      ':hover': {
+      backgroundImage: `linear-gradient(36deg, ${colors.primary} 0%, ${colors.purple} 100%)`,
+      position: 'relative',
+      zIndex: 1,
+      transition: 'all 140ms ease-in-out',
+      '::before': {
+        position: 'absolute',
+        content: '""', top: 0, right: 0, bottom: 0, left: 0,
+        borderRadius: '2rem',
         backgroundImage: `linear-gradient(36deg, ${lighten(0.1, colors.primary)} 0%, ${lighten(0.1, colors.purple)} 100%)`,
+        zIndex: -1,
+        transition: 'opacity 140ms linear',
+        opacity: 0
+      },
+      ':hover::before': {
+        opacity: 1
       },
       ':active': {
-        transform: 'scale(0.8)'
+        transform: 'scale(0.85)'
       }
     },
     outline: {
@@ -116,18 +130,29 @@ export const preset = {
       color: 'primary',
       background: 'transparent',
       border: '1px solid',
+      '::before': {
+        backgroundImage: 'none',
+      },
       ':hover': {
         color: lighten(0.1, colors.primary),
         borderColor: lighten(0.1, colors.primary),
-        backgroundImage: 'none',
       },
     },
     secondary: {
       variant: 'buttons.primary',
       color: 'white',
       backgroundImage: `linear-gradient(36deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
-      ':hover': {
+      '::before': {
+        position: 'absolute',
+        content: '""', top: 0, right: 0, bottom: 0, left: 0,
+        borderRadius: '2rem',
         backgroundImage: `linear-gradient(36deg, ${lighten(0.1, colors.primary)} 0%, ${lighten(0.1, colors.secondary)} 100%)`,
+        zIndex: -1,
+        transition: 'opacity 140ms linear',
+        opacity: 0
+      },
+      ':hover::before': {
+        opacity: 1
       },
     },
   },

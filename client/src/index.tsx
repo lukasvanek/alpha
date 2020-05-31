@@ -7,6 +7,7 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ThemeProvider } from 'emotion-theming';
 import theme from './theme';
+import './tableTheme';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
