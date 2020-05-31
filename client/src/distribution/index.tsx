@@ -52,8 +52,6 @@ const Distribution = () => {
     <Box px={[20, 50, 100]}>
 
       <Button variant='primary'>submit</Button>
-      <Button variant='outline'>ty</Button>
-      <Button variant='secondary'>kundo</Button>
 
       <Bar
         data={chartData}
