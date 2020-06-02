@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import DataTable from 'react-data-table-component';
-import { Box, Button } from 'rebass';
+import { Box, Button, Text } from 'rebass';
 import { colors } from '../theme';
 import numeral from 'numeral';
 import QueryBuilder from './queryBuilder';
+import { MapToList } from '../lib';
+import { keys } from 'ramda';
+import { signs } from './signs';
 
 const COMPANIES = gql`
   query Companies ($query: JSON, $limit: Int, $page: Int, $sortBy: String, $sortDir: Int) {
     companies(query: $query, limit: $limit, page: $page, sortBy: $sortBy, sortDir: $sortDir) {
       docs {
         name,
-        symbol,
+        ticker,
+        industry,
         Price,
         MarketCap,
         RSI14,
@@ -31,8 +35,8 @@ const COMPANIES = gql`
 
 const columns = [
   {
-    name: 'Symbol',
-    selector: 'symbol',
+    name: 'Ticker',
+    selector: 'ticker',
     sortable: true,
   },
   {
@@ -40,6 +44,12 @@ const columns = [
     selector: 'name',
     sortable: true,
     grow: 3,
+  },
+  {
+    name: 'Industry',
+    selector: 'industry',
+    sortable: true,
+    grow: 2,
   },
   {
     name: 'Price',
@@ -172,7 +182,7 @@ const Screener = () => {
   const [sortBy, setSortBy] = useState({ ticker: 1 } as SortBy);
 
   const { loading, error, data, fetchMore } = useQuery(COMPANIES, {
-    variables: { query, page: 1, limit, sortBy: Object.keys(sortBy)[0], sortDir: sortBy[Object.keys(sortBy)[0]]},
+    variables: { query, page: 1, limit, sortBy: keys(sortBy)[0], sortDir: sortBy[keys(sortBy)[0]]},
     fetchPolicy: "cache-and-network"
   });
 
@@ -191,8 +201,15 @@ const Screener = () => {
   return (
     <Box px={[20, 50, 100]}>
 
+      <Box py={0}>
+        {MapToList(query).map((q: any) =>
+          <>
+            <Text variant='caps1'>{q.id} {signs[(keys(q)[1] as string)].title} {q[(keys(q)[1] as string)]}</Text>
+          </>
+        )}
+      </Box>
       <Box py={20}>
-        <QueryBuilder onQueryChange={setQuery} />
+        <QueryBuilder onQueryChange={(newQuery: any) => setQuery({ ...query, ...newQuery })} />
       </Box>
 
       <DataTable

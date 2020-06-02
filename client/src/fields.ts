@@ -11,7 +11,11 @@ const genBounds = (start: number = 0, step: number = 10, max: number = 100) => {
 
 type Fields = {
   [key: string]: {
-    bounds: number[], format: string, title?: string, percent?: boolean
+    bounds: number[],
+    format: string,
+    title?: string,
+    multiplier?: number,
+    percent?: boolean
   }
 };
 
@@ -20,6 +24,7 @@ export const fields: Fields = {
     bounds:  [...genBounds(0, M(50), B(1)), ...genBounds(B(2), B(1), B(20)), B(2000)],
     format: '0a',
     title: 'Market Cap.',
+    multiplier: M(1)
   },
   'Price': {
     bounds: [...genBounds(0, 2, 50), 200, 500, 1000000],

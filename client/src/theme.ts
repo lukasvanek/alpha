@@ -130,6 +130,7 @@ export const preset = {
     },
     textarea: {},
     label: {
+      whiteSpace: 'nowrap',
       variant: 'text.caps',
       fontSize: '0.6rem',
       letterSpacing: '0.1rem',
