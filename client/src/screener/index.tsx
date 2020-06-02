@@ -5,10 +5,11 @@ import DataTable from 'react-data-table-component';
 import { Box, Button } from 'rebass';
 import { colors } from '../theme';
 import numeral from 'numeral';
+import QueryBuilder from './queryBuilder';
 
 const COMPANIES = gql`
-  query Companies ($limit: Int, $page: Int, $sortBy: String, $sortDir: Int) {
-    companies(limit: $limit, page: $page, sortBy: $sortBy, sortDir: $sortDir) {
+  query Companies ($query: JSON, $limit: Int, $page: Int, $sortBy: String, $sortDir: Int) {
+    companies(query: $query, limit: $limit, page: $page, sortBy: $sortBy, sortDir: $sortDir) {
       docs {
         name,
         symbol,
@@ -167,10 +168,11 @@ type SortBy = {[by: string]: number};
 const Screener = () => {
 
   const [limit, setLimit] = useState(25);
+  const [query, setQuery] = useState({} as any);
   const [sortBy, setSortBy] = useState({ ticker: 1 } as SortBy);
 
   const { loading, error, data, fetchMore } = useQuery(COMPANIES, {
-    variables: { page: 1, limit, sortBy: Object.keys(sortBy)[0], sortDir: sortBy[Object.keys(sortBy)[0]]},
+    variables: { query, page: 1, limit, sortBy: Object.keys(sortBy)[0], sortDir: sortBy[Object.keys(sortBy)[0]]},
     fetchPolicy: "cache-and-network"
   });
 
@@ -189,7 +191,9 @@ const Screener = () => {
   return (
     <Box px={[20, 50, 100]}>
 
-      <Button variant='primary'>submit</Button>
+      <Box py={20}>
+        <QueryBuilder onQueryChange={setQuery} />
+      </Box>
 
       <DataTable
         theme="alpha"

@@ -6,7 +6,7 @@ const Company_UPDATED = 'Company_UPDATED';
 
 const CompanyQueries = {
   companies: async (_, args) => {
-    const { page = 1, limit = 20, sortBy = 'ticker', sortDir = 1 } = args;
+    const { query = {}, page = 1, limit = 20, sortBy = 'ticker', sortDir = 1 } = args;
     try {
       const options = {
         sort: { [sortBy]: sortDir },
@@ -14,10 +14,11 @@ const CompanyQueries = {
         page,
         limit
       };
-      const query = {
-        [sortBy]: { $exists: true, $ne: null }
+      const queryToExec = {
+        [sortBy]: { $exists: true, $ne: null },
+        ...query,
       }
-      const companies = await Companies.paginate(query, options);
+      const companies = await Companies.paginate(queryToExec, options);
       console.log(companies);
       return companies;
     } catch (err) {

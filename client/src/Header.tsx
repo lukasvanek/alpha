@@ -45,14 +45,16 @@ const Header = () => {
               fontWeight: 300,
             }}          
           >
-            αlphα
+            <span>αlphα</span>
+
             <span style={{
               letterSpacing: '0.66rem',
-              color: 'rgba(178, 202, 255, 0.3)'
+              color: colors.gray
             }}>|</span>
+            
             <span style={{
               letterSpacing: '0.42rem',
-              color: 'rgba(178, 202, 255, 0.3)'
+              color: colors.gray
             }}>analytics</span>
           </Text>
         </Box>

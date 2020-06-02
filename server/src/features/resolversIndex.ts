@@ -1,6 +1,8 @@
 import { CompanyMutation, CompanyQueries, CompanySubscription } from './company';
+import GraphQLJSON from 'graphql-type-json';
 
 const rootResolver = {
+  JSON: GraphQLJSON,
   Query: {
     ...CompanyQueries
     // Add other queries here

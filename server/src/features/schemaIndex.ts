@@ -16,8 +16,9 @@ const MainTypeDefs = gql`
     prevPage: Int,
     nextPage: Int
   }
+  scalar JSON
   type Query {
-    companies(page: Int, limit: Int, sortBy: String, sortDir: Int): Paginated
+    companies(query: JSON, page: Int, limit: Int, sortBy: String, sortDir: Int): Paginated
     company(symbol: String!): Company!
     distribution(field: String!, boundaries: [Float]): [DistributionItem]
   }

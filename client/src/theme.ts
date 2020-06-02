@@ -1,16 +1,16 @@
-import { lighten } from 'polished';
+import { lighten, opacify } from 'polished';
 
 export const colors = {
-  text: '#fff',
-  background: '#000',
+  text: 'white',
+  background: '#000000',
   primary: '#002af8',
   secondary: '#03dac6',
   muted: '#f6f6f6',
-  gray: '#555',
+  gray: 'rgba(178, 202, 255, 0.4)',
   purple: '#cf1fd7',
-  red: '#F64747',
-  green: '#00B16A',
-  yellow: '#F4D03F',
+  red: '#f74646',
+  green: '#00b188',
+  yellow: '#ffe166',
 }
 
 export const preset = {
@@ -38,7 +38,7 @@ export const preset = {
     avatar: 48,
   },
   radii: {
-    default: 4,
+    default: 6,
     circle: 99999,
   },
   shadows: {
@@ -55,17 +55,26 @@ export const preset = {
       fontFamily: 'heading',
       lineHeight: 'heading',
       fontWeight: 'heading',
+      color: colors.text
     },
     display: {
       fontFamily: 'heading',
       fontWeight: 'heading',
       lineHeight: 'heading',
       fontSize: [ 6, 7 ],
+      color: colors.text
     },
     caps: {
       textTransform: 'uppercase',
-      letterSpacing: '0.1em',
+      letterSpacing: '0.2rem',
+      fontWeight: 300,
+      color: colors.text,
     },
+    caps1: {
+      variant: 'text.caps',
+      marginBottom: '1rem',
+      fontSize: 1
+    }
   },
   variants: {
     avatar: {
@@ -94,6 +103,50 @@ export const preset = {
       }
     },
   },
+  forms: {
+    input: {
+      paddingX: 20,
+      borderRadius: 9999,
+      transition: 'all 140ms ease-in-out',
+      color: colors.gray,
+      ':hover': {
+        color: opacify(0.1, colors.gray),
+      },
+      ':focus,.active': {
+        color: 'primary',
+      },
+    },
+    select: {
+      paddingX: 20,
+      borderRadius: 9999,
+      transition: 'all 140ms ease-in-out',
+      color: colors.gray,
+      ':hover': {
+        color: opacify(0.1, colors.gray),
+      },
+      ':focus,.active': {
+        color: 'primary',
+      },
+    },
+    textarea: {},
+    label: {
+      variant: 'text.caps',
+      fontSize: '0.6rem',
+      letterSpacing: '0.1rem',
+      position: 'relative',
+      bottom: '-0.3rem',
+      left: '18px',
+      background: colors.background,
+      width: 'min-content',
+      padding: '0 1px 0 3px',
+      color: colors.gray,
+      ':focus,.active': {
+        color: 'primary',
+      },
+    },
+    radio: {},
+    checkbox: {},
+  },
   buttons: {
     primary: {
       variant: 'text.caps',
@@ -102,8 +155,8 @@ export const preset = {
       fontFamily: 'body',
       fontSize: '0.7rem',
       fontWeight: 300,
-      color: 'white',
-      borderRadius: '2rem',
+      whiteSpace: 'nowrap',
+      borderRadius: 99999,
       cursor: 'pointer',
       backgroundImage: `linear-gradient(36deg, ${colors.primary} 0%, ${colors.purple} 100%)`,
       position: 'relative',
@@ -123,6 +176,9 @@ export const preset = {
       },
       ':active': {
         transform: 'scale(0.85)'
+      },
+      '& svg': {
+        marginBottom: '-1px'
       }
     },
     outline: {
