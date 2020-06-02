@@ -5,6 +5,8 @@ import { Bar } from 'react-chartjs-2';
 import { Box, Button } from 'rebass';
 import { colors } from '../theme';
 import { lighten, transparentize } from 'polished';
+import numeral from 'numeral';
+import { fields } from '../fields';
 
 const DISTRIBUTION = gql`
   query Distribution ($field: String!, $boundaries: [Float]) {
@@ -17,24 +19,28 @@ const DISTRIBUTION = gql`
   }
 `;
 
-// { field: 'PE', boundaries: [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 10000] },
-// { field: 'RSI14', boundaries: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] },
-// { field: 'Employees', boundaries: [0, 50, 100, 500, 1000, 10000, 100000, 10000000] },
-// { field: 'Recom', boundaries: [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 10] },
+const makeLabel = (x: any, field: any) => {
+  let from = `${numeral(x.name.min).format(field.format)}`;
+  let to = `${numeral(x.name.max).format(field.format)}`;
+  if (field.percent) {
+    from = from + '%';
+    to = to + '%';
+  }
+  return `${from} - ${to}`.toUpperCase();
+}
 
 const Distribution = () => {
 
   const [selectedField, setSelectedField] = useState('RSI14');
 
-  const distResponse = useQuery(DISTRIBUTION, {
-    variables: { field: selectedField, boundaries: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] },
-    fetchPolicy: "cache-and-network"
+  const distQuery = useQuery(DISTRIBUTION, {
+    variables: { field: selectedField, boundaries: fields[selectedField].bounds }
   });
 
   let chartData = {};
-  if (distResponse.data) {
+  if (distQuery.data) {
     chartData = {
-      labels: distResponse.data.distribution.map((x: any) => `${x.name.min.toFixed(1)}-${x.name.max.toFixed(1)}`),
+      labels: distQuery.data.distribution.map((x: any) => makeLabel(x, fields[selectedField])),
       datasets: [
         {
           label: selectedField,
@@ -42,7 +48,7 @@ const Distribution = () => {
           borderWidth: 3,
           hoverBackgroundColor: transparentize(0.8, lighten(0.1, colors.primary)),
           hoverBorderColor: lighten(0.1, colors.primary),
-          data: distResponse.data.distribution.map((x: any) => x.count)
+          data: distQuery.data.distribution.map((x: any) => x.count)
         }
       ]
     };
@@ -51,7 +57,11 @@ const Distribution = () => {
   return (
     <Box px={[20, 50, 100]}>
 
-      <Button variant='primary'>submit</Button>
+      {Object.keys(fields).map(fKey =>
+        <Button mr={10} mb={10} variant='outline' className={fKey === selectedField ? 'active' : ''} onClick={() => {
+          setSelectedField(fKey);
+        }}>{fields[fKey].title || fKey}</Button>
+      )}
 
       <Bar
         data={chartData}

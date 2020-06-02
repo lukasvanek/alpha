@@ -6,13 +6,19 @@ const Company_UPDATED = 'Company_UPDATED';
 
 const CompanyQueries = {
   companies: async (_, args) => {
-    const { page = 1, limit = 20 } = args;
+    const { page = 1, limit = 20, sortBy = 'ticker', sortDir = 1 } = args;
     try {
-      const companies = await Companies
-        .find()
-        .limit(limit)
-        .skip((page - 1) * limit)
-        .lean();
+      const options = {
+        sort: { [sortBy]: sortDir },
+        lean: true,
+        page,
+        limit
+      };
+      const query = {
+        [sortBy]: { $exists: true, $ne: null }
+      }
+      const companies = await Companies.paginate(query, options);
+      console.log(companies);
       return companies;
     } catch (err) {
       throw err;
@@ -42,7 +48,7 @@ const CompanyQueries = {
         $bucket: {
           groupBy: `$${field}`, 
           boundaries,
-          default: "Other", 
+          default: 'other', 
           output : {
             "count" : {$sum : 1}
           }
@@ -68,16 +74,26 @@ const CompanyQueries = {
           }
         }
       ]);
-      console.log(dist);
+
+
       if (boundaries) {
-        const appliedBoundaries = dist.map(d => d.name);
-        return dist.map((d, i) => {
-          if (d.name === 'Other') {
-            return {...d, name: {min: 0, max: boundaries[boundaries.length-1]} };
+        const appliedBoundaries = dist.map(d => d.name).filter(d => d !== 'other');
+        const edited = dist.map((d, i) => {
+          if (d.name === 'other') {
+            return {
+              count: d.count,
+              name: { min: 0, max: boundaries[boundaries.length-1] }
+            };
           }
-          return { ...d, name: {min: d.name, max: appliedBoundaries[i+1] || boundaries[boundaries.length-1] } };
+          return {
+            count: d.count,
+            name: { min: d.name, max: appliedBoundaries[i+1] || boundaries[boundaries.length-1] }
+          };
         })
+        return edited;
       }
+
+
       return dist;
     } catch (err) {
       throw err;

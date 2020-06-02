@@ -203,7 +203,7 @@ const processTickers = (tickers) => {
 
 const run = async () => {
   let tickers = [];
-  let starWithNo = 1000;
+  let starWithNo = 1;
   let newTickers = [];
 
   while (tickers.length === 0 || newTickers.length > 1) {

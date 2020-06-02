@@ -4,8 +4,20 @@ import resolvers from './resolversIndex';
 import CompanySchema from './company/schema';
 
 const MainTypeDefs = gql`
+  type Paginated {
+    docs: [Company]
+    totalDocs: Int
+    limit: Int
+    totalPages: Int
+    page: Int
+    pagingCounter: Int
+    hasPrevPage: Boolean
+    hasNextPage: Boolean
+    prevPage: Int,
+    nextPage: Int
+  }
   type Query {
-    companies(page: Int, limit: Int): [Company!]!
+    companies(page: Int, limit: Int, sortBy: String, sortDir: Int): Paginated
     company(symbol: String!): Company!
     distribution(field: String!, boundaries: [Float]): [DistributionItem]
   }

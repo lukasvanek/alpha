@@ -4,20 +4,26 @@ import { gql } from 'apollo-boost';
 import DataTable from 'react-data-table-component';
 import { Box, Button } from 'rebass';
 import { colors } from '../theme';
+import numeral from 'numeral';
 
 const COMPANIES = gql`
-  query Companies ($limit: Int, $page: Int) {
-    companies(limit: $limit, page: $page) {
-      name,
-      symbol,
-      Price,
-      RSI14,
-      PE,
-      PB,
-      PS,
-      Employees,
-      Beta,
-      Dividend
+  query Companies ($limit: Int, $page: Int, $sortBy: String, $sortDir: Int) {
+    companies(limit: $limit, page: $page, sortBy: $sortBy, sortDir: $sortDir) {
+      docs {
+        name,
+        symbol,
+        Price,
+        MarketCap,
+        RSI14,
+        Recom,
+        PE,
+        PB,
+        PS,
+        Employees,
+        Beta,
+        Dividend
+      },
+      totalDocs
     }
   }
 `;
@@ -38,7 +44,18 @@ const columns = [
     name: 'Price',
     selector: 'Price',
     sortable: true,
-    width: '70px'
+    width: '80px',
+    allowOverflow: true,
+  },
+  {
+    name: 'Market Cap.',
+    selector: 'MarketCap',
+    sortable: true,
+    width: '90px',
+    format: (row: any) => {
+      if (!row.MarketCap) return '';
+      return numeral(row.MarketCap).format('0.0a').toUpperCase();
+    }
   },
   {
     name: 'RSI14',
@@ -69,10 +86,27 @@ const columns = [
     ]
   },
   {
+    name: 'Recom',
+    selector: 'Recom',
+    sortable: true,
+    width: '70px',
+    conditionalCellStyles: [
+      {
+        when: (row: any) => row.Recom <= 2,
+        style: { color: colors.green },
+      },
+      {
+        when: (row: any) => row.Recom >= 4,
+        style: { color: colors.red },
+      }
+    ]
+  },
+  {
     name: 'P/E',
     selector: 'PE',
     sortable: true,
     width: '70px',
+    allowOverflow: true,
     conditionalCellStyles: [
       {
         when: (row: any) => row.PE <= 15,
@@ -92,19 +126,26 @@ const columns = [
     name: 'P/S',
     selector: 'PS',
     sortable: true,
-    width: '70px'
+    width: '70px',
+    allowOverflow: true,
   },
   {
     name: 'P/B',
     selector: 'PB',
     sortable: true,
-    width: '70px'
+    width: '70px',
+    allowOverflow: true,
   },
   {
     name: 'Employees',
     selector: 'Employees',
     sortable: true,
-    width: '80px'
+    allowOverflow: true,
+    width: '80px',
+    format: (row: any) => {
+      if (!row.Employees) return '';
+      return numeral(row.Employees).format('0,0');
+    }
   },
   {
     name: 'Beta',
@@ -121,12 +162,15 @@ const columns = [
   },
 ];
 
+type SortBy = {[by: string]: number};
+
 const Screener = () => {
 
   const [limit, setLimit] = useState(25);
+  const [sortBy, setSortBy] = useState({ ticker: 1 } as SortBy);
 
   const { loading, error, data, fetchMore } = useQuery(COMPANIES, {
-    variables: { page: 1, limit },
+    variables: { page: 1, limit, sortBy: Object.keys(sortBy)[0], sortDir: sortBy[Object.keys(sortBy)[0]]},
     fetchPolicy: "cache-and-network"
   });
 
@@ -153,14 +197,19 @@ const Screener = () => {
         paginationPerPage={limit}
         paginationServer
         paginationRowsPerPageOptions={[10, 25, 50, 100]}
-        paginationTotalRows={7000}
+        paginationTotalRows={data ? data.companies.totalDocs : 0}
         columns={columns}
-        data={data ? data.companies : []}
+        data={data ? data.companies.docs : []}
         onChangeRowsPerPage={(newPerPage, page) => {
           setLimit(newPerPage);
           giveMeMore(page, newPerPage);
         }}
         onChangePage={(page) => giveMeMore(page, limit)}
+        sortServer
+        onSort={(col, sortDir) => {
+          const sortObj = { [col.selector as string]: sortDir === 'asc' ? 1 : -1 };
+          setSortBy(sortObj);
+        }}
       />
     </Box>
   );

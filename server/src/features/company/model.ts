@@ -1,4 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const CompaniesSchema = new Schema({
   ticker: String,
@@ -85,26 +87,7 @@ const CompaniesSchema = new Schema({
   timestamps: true
 });
 
-/**
- * Statics
- */
-CompaniesSchema.statics = {
-  /**
-   * Get Company
-   * @param {string} symbol - The symbol of company (exchange:ticker)
-   */
-  get(symbol: string): mongoose.Document {
-    return this.findOne({ symbol })
-      .execAsync()
-      .then((company: any) => {
-        if (company) {
-          return company;
-        }
-      });
-  }
-};
 CompaniesSchema.index({ name: 'text' });
-
 CompaniesSchema.index({ symbol: 1 }, { unique: true });
 CompaniesSchema.index({ Index: 1 });
 CompaniesSchema.index({ PE: 1 });
@@ -172,6 +155,26 @@ CompaniesSchema.index({ SMA200: 1 });
 CompaniesSchema.index({ Volume: 1 });
 
 CompaniesSchema.index({ createdAt: 1, updatedAt: 1 });
+/**
+ * Statics
+ */
+CompaniesSchema.statics = {
+  /**
+   * Get Company
+   * @param {string} symbol - The symbol of company (exchange:ticker)
+   */
+  get(symbol: string): mongoose.Document {
+    return this.findOne({ symbol })
+      .execAsync()
+      .then((company: any) => {
+        if (company) {
+          return company;
+        }
+      });
+  }
+};
+CompaniesSchema.plugin(updateIfCurrentPlugin, { strategy: 'timestamp' });
+CompaniesSchema.plugin(mongoosePaginate);
 
 
 

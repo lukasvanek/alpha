@@ -137,6 +137,10 @@ export const preset = {
         color: lighten(0.1, colors.primary),
         borderColor: lighten(0.1, colors.primary),
       },
+      '&.active': {
+        color: 'white',
+        borderColor: 'white'
+      }
     },
     secondary: {
       variant: 'buttons.primary',

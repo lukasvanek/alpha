@@ -15,7 +15,7 @@ const StyledLink = (props: any) => {
       fontSize={1}
       flex={1}
       sx={{
-        color: pathname === props.to ? colors.primary : 'rgba(255,255,255,0.75)',
+        color: pathname === props.to ? colors.primary : 'rgba(178, 202, 255, 0.4)',
         textDecoration: 'none',
         letterSpacing: '0.3rem',
         paddingX: '0.5rem',
