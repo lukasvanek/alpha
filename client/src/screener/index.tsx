@@ -7,7 +7,7 @@ import { colors } from '../theme';
 import numeral from 'numeral';
 import QueryBuilder from './queryBuilder';
 import { MapToList } from '../lib';
-import { keys } from 'ramda';
+import { keys, dissoc } from 'ramda';
 import { signs } from './signs';
 
 const COMPANIES = gql`
@@ -38,18 +38,19 @@ const columns = [
     name: 'Ticker',
     selector: 'ticker',
     sortable: true,
+    width: '80px'
   },
   {
     name: 'Name',
     selector: 'name',
     sortable: true,
-    grow: 3,
+    width: '200px'
   },
   {
     name: 'Industry',
     selector: 'industry',
     sortable: true,
-    grow: 2,
+    width: '160px'
   },
   {
     name: 'Price',
@@ -203,9 +204,14 @@ const Screener = () => {
 
       <Box py={0}>
         {MapToList(query).map((q: any) =>
-          <>
-            <Text variant='caps1'>{q.id} {signs[(keys(q)[1] as string)].title} {q[(keys(q)[1] as string)]}</Text>
-          </>
+          <Button variant='outline' pr='40px'>
+            {q.id} {signs[(keys(q)[1] as string)].title} {numeral(q[(keys(q)[1] as string)]).format('0.0a')}
+            <Button
+              variant='circle'
+              onClick={() => setQuery(dissoc(q.id)(query))}
+              sx={{ position: 'absolute', top: 0, right: 0 }}
+            >x</Button>
+          </Button>
         )}
       </Box>
       <Box py={20}>

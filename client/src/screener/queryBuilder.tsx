@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button } from 'rebass';
 // @ts-ignore
 import { Label, Input, Select } from '@rebass/forms';
 import { IoMdAdd } from 'react-icons/io';
@@ -12,7 +12,6 @@ const QueryBuilder = ({ onQueryChange }: any) => {
 
   return (
     <>
-      <Text variant='caps1'>Query Builder</Text>
 
       <Formik
       initialValues={{ attr: 'MarketCap', val: 100, sign: '$gte' }}

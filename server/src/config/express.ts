@@ -37,6 +37,11 @@ class Express {
      */
     this.server.applyMiddleware({ app: this.express });
     this.httpServer = http.createServer(this.express);
+
+    this.express.post('/enter', function (req, res) {
+      console.log(req.body);
+      res.send('k');
+    })
     /**
      * Installing subscription handlers
      */

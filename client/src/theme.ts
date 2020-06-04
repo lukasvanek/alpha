@@ -199,6 +199,15 @@ export const preset = {
         borderColor: 'white'
       }
     },
+    circle: {
+      background: 'primary',
+      width: '35px',
+      height: '35px',
+      borderRadius: 99999,
+      color: 'white',
+      cursor: 'pointer',
+      padding: 0
+    },
     secondary: {
       variant: 'buttons.primary',
       color: 'white',
