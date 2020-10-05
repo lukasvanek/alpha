@@ -82,7 +82,8 @@ const CompaniesSchema = new Schema({
   SMA50: Number,
   SMA200: Number,
   Volume: Number,
-  Change: Number
+  Change: Number,
+  eodCompleted: Date,
 }, {
   timestamps: true
 });
@@ -153,7 +154,7 @@ CompaniesSchema.index({ SMA20: 1 });
 CompaniesSchema.index({ SMA50: 1 });
 CompaniesSchema.index({ SMA200: 1 });
 CompaniesSchema.index({ Volume: 1 });
-
+CompaniesSchema.index({ eodCompleted: 1 });
 CompaniesSchema.index({ createdAt: 1, updatedAt: 1 });
 /**
  * Statics
