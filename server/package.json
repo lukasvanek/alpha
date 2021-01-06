@@ -22,7 +22,7 @@
     "apollo-server": "2.6.1",
     "apollo-server-testing": "2.6.1",
     "aws-sdk": "^2.585.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
